@@ -1,0 +1,13 @@
+{
+  "whitelist": [
+    "system",
+    "idle",
+    "secure system",
+    "csrss.exe",
+    "wininit.exe"
+  ],
+  "blacklist": [
+    "mimikatz.exe",
+    "netcat.exe"
+  ]
+}
