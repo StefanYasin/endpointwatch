@@ -1,0 +1,49 @@
+# endpointwatch detection rules
+# Copy to config/rules.yaml and edit. Any category below can be extended;
+# rules are substring-matched (case-insensitive) against event values.
+#
+# Categories: process, network, persistence
+# Each rule: name (label), pattern (substring to match), severity
+#            (info|low|medium|high|critical), reason (why it matters)
+
+process:
+  - name: mimikatz
+    pattern: mimikatz
+    severity: critical
+    reason: Credential-dumping tool
+  - name: powershell-encoded
+    pattern: "-enc"
+    severity: high
+    reason: Encoded PowerShell command
+  - name: wget-download
+    pattern: wget
+    severity: medium
+    reason: Possible staged download
+  - name: base64-bomb
+    pattern: "base64 -d"
+    severity: high
+    reason: Decoding payload from command line
+
+network:
+  - name: unknown-external-port
+    pattern: "4444"
+    severity: high
+    reason: Common C2 reverse-shell port
+  - name: tor-socks
+    pattern: "9050"
+    severity: medium
+    reason: Tor SOCKS port
+  - name: ssh-brute
+    pattern: "22"
+    severity: low
+    reason: SSH port (watch for brute force)
+
+persistence:
+  - name: run-key
+    pattern: "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+    severity: high
+    reason: Registry Run key (startup persistence)
+  - name: schtasks
+    pattern: "schtasks"
+    severity: medium
+    reason: Scheduled task creation (persistence tactic)

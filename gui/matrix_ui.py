@@ -11,7 +11,7 @@ from modules.intel_feeds import IntelFeeds
 class MatrixUI:
     def __init__(self, root, audio, ai=None, db=None):
         self.root = root
-        self.root.title("SQSM - Stefan’s Quantum Security Monitor")
+        self.root.title("endpointwatch — live-response endpoint monitor")
         self.audio = audio
         self.ai = ai
         self.db = db
@@ -108,10 +108,10 @@ class MatrixUI:
 
     # ---------------- DOCS ----------------
     def load_docs(self):
-        docs = """# 🛡️ SQSM - Stefan’s Quantum Security Monitor
+        docs = """# 🛡️ endpointwatch — live-response endpoint monitor
 
-SQSM is your **visual cyber defense dashboard**.  
-Where antivirus protects in silence, SQSM shows you what's happening, explains threats, and lets you neutralize them.
+endpointwatch is your **visual cyber defense dashboard**.  
+Where antivirus protects in silence, endpointwatch shows you what's happening, explains threats, and lets you neutralize them.
 
 Tabs:
 - Dashboard → logs & status
