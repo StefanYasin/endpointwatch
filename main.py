@@ -30,7 +30,7 @@ def main():
 
     # Launch GUI
     gui = MatrixUI(root, audio=audio, ai=ai, db=db)
-    gui.log("Dashboard", "🚀 Quantum Security Monitor started")
+    gui.log("Dashboard", "🚀 endpointwatch started")
 
     root.mainloop()
 

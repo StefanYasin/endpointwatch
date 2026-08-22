@@ -1,106 +1,80 @@
-# 🛡️ SQSM — Stefan’s Quantum Security Monitor
+# 🛡️ endpointwatch
 
-SQSM turns your PC into a **cyber defense command center**.  
-Where antivirus stops at protection, SQSM goes further: **visual monitoring, AI explanations, and one‑click threat neutralization**.
+**Live-response endpoint monitoring for Windows.** Watches processes, connections, and persistence — enriched with VirusTotal + AbuseIPDB lookups and plain-English LLM alerts.
 
----
-
-## ✨ What Makes SQSM Different
-
-- **Matrix‑style Screensaver**  
-  A living cyber dashboard — glowing green rain with real‑time overlays for system stats, security news, threats, and AI insights.
-
-- **See Threats, Don’t Just Block Them**  
-  SQSM shows you what’s happening: suspicious processes, hidden startup entries, network connections, clipboard hijacks, and file changes.
-
-- **Smart Explanations**  
-  Built‑in AI explains alerts in plain English, so you always know *why* something is dangerous.
-
-- **One‑Click Neutralization**  
-  If malware plants itself in startup, SQSM highlights it and lets you remove it instantly — no registry digging required.
-
-- **Security News Feed**  
-  Stay ahead with live updates from Hacker News, US‑CERT, Packet Storm, DEF CON, and Hak5.
-
-- **Daily/Weekly Reports**  
-  Generate polished Markdown reports that summarize your system’s security state and recent activity.
+Where antivirus stops at protection, endpointwatch goes further: **visual monitoring, YAML-driven detection rules, structured evidence export, AI explanations, and one-click threat neutralization**.
 
 ---
 
-## 🚀 Getting Started
+## ✨ What Makes endpointwatch Different
 
-1. **Run as Administrator**  
-   SQSM needs elevated permissions to monitor and neutralize startup threats.
+- **Matrix-style live dashboard** — glowing green rain with real-time overlays for system stats, security news, threats, and AI insights
+- **See threats, don't just block them** — suspicious processes, hidden startup entries, network connections, clipboard hijacks, file changes
+- **YAML detection rules** *(roadmap #1)* — define your own detections in `config/rules.yaml` without touching code. Ships with defaults for mimikatz, encoded PowerShell, C2 ports, persistence keys
+- **JSON evidence export** *(roadmap #1)* — every rule match writes a structured, SIEM-friendly evidence pack to `evidence/` for incident response
+- **Smart explanations** — built-in AI explains alerts in plain English
+- **One-click neutralization** — remove malware from startup instantly, no registry digging
+- **Security news feed** — live updates from Hacker News, US-CERT, Packet Storm, DEF CON, Hak5
+- **Daily/weekly reports**
 
-2. **Install Dependencies**
-	pip install -r requirements.txt
+## 🚀 Quick Start
 
-3. **Launch SQSM**  
-	python main.py
-	
-4. **Set API Keys (Optional but Recommended)**  
-- [VirusTotal](https://www.virustotal.com/) → file and process reputation lookups.  
-- [AbuseIPDB](https://www.abuseipdb.com/) → IP reputation checks.  
-- [OpenAI](https://platform.openai.com/) → AI explanations and insights.  
+```bash
+pip install -r requirements.txt
+python main.py
+```
 
-SQSM will automatically use them once saved.
+## 🧩 Detection Rules (YAML)
 
----
+Copy `config/rules.yaml.example` to `config/rules.yaml`:
 
-## 🔍 Key Features
+```yaml
+process:
+  - name: mimikatz
+    pattern: mimikatz
+    severity: critical
+    reason: Credential-dumping tool
+  - name: powershell-encoded
+    pattern: "-enc"
+    severity: high
+    reason: Encoded PowerShell command
+```
 
-- **Threat Monitoring**  
-- Process monitoring  
-- Network connection tracking  
-- Clipboard hijack detection  
-- File system changes  
-- Startup persistence watcher  
+Categories: `process`, `network`, `persistence`. Rules are substring-matched (case-insensitive). Severity: `info | low | medium | high | critical`.
 
-- **Threat Enrichment**  
-- VirusTotal scans of suspicious files  
-- AbuseIPDB checks for shady IPs  
+## 📦 Evidence Export
 
-- **Visual Dashboard**  
-- Matrix‑rain screensaver with overlays  
-- Color‑coded alerts (red = process, orange = network, cyan = persistence, etc.)  
-- AI‑enhanced facts and security insights  
+Every rule match writes a timestamped JSON file to `evidence/`:
 
-- **System Hardening Checks**  
-- Defender, Firewall, UAC, Admin accounts  
-- Alerts if critical protections are off  
+```json
+{
+  "schema_version": "1.0",
+  "event": {"type": "process", "name": "mimikatz.exe", "pid": 1234},
+  "rule_matches": [{"name": "mimikatz", "severity": "critical", "reason": "Credential-dumping tool"}]
+}
+```
 
----
+Feed these to your SIEM, ticketing system, or IR workflow.
 
-## 🧹 Neutralizing Threats
+## 🧪 Tests
 
-1. Go to the **Threats tab**.  
-2. Click **🧹 Neutralize Selected Threat**.  
-3. A popup window will show current threats.  
-4. Select the one you want to remove → confirm → SQSM cleans it up.  
+```bash
+python -m pytest tests/ -v
+```
 
----
+## 📋 Roadmap
 
-## 💡 Why Use SQSM?
+- [x] YAML detection rules
+- [x] JSON evidence export
+- [ ] Baseline/learning mode (flag deviations from a learned normal)
+- [ ] SIEM ingestion guide (Splunk/ELK examples)
 
-- Antivirus protects you in the background.  
-- SQSM **empowers you** with visibility, explanations, and control.  
-- It makes cybersecurity visual, interactive, and fun.  
+## ⚠️ Notes
 
----
+- Windows-focused (uses psutil, Tkinter)
+- LLM alerts are optional — works fully offline without AI keys
+- Maintained actively — this is the *maintained alternative* in a field of abandoned live-response tools
 
-## 📊 Example Use Cases
+## License
 
-- Detect and remove unwanted startup programs.  
-- Watch system health and network activity in real time.  
-- Stay informed with live security news and hacking updates.  
-- Learn cybersecurity with AI‑explained alerts.  
-
----
-
-## ❤️ Credits
-
-- Built on Python, Tkinter, and psutil.  
-- Security intel from VirusTotal, AbuseIPDB, Hacker News, US‑CERT, Hak5, and DEF CON.  
-- Inspired by classic hacker aesthetics — **the Matrix meets modern cybersecurity**.  
-
----
+MIT

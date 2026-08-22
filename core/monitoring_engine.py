@@ -9,12 +9,18 @@ from modules.filesystem_monitor import FileSystemMonitor
 from modules.hardening_monitor import HardeningMonitor
 from modules.intel_monitor import IntelMonitor
 from core.correlation_engine import CorrelationEngine
+from core.rules_engine import RulesEngine
+from core.evidence_exporter import EvidenceExporter
 
 class MonitoringEngine:
     def __init__(self, db_conn, gui, audio):
         self.db = db_conn
         self.gui = gui
         self.audio = audio
+
+        # YAML rules + evidence export (community roadmap)
+        self.rules = RulesEngine()
+        self.evidence = EvidenceExporter()
 
         # Monitoring modules
         self.procmon = ProcessMonitor(db_conn)
@@ -54,6 +60,11 @@ class MonitoringEngine:
                     self.audio.play("alert")
                     self.gui.update_status("Process threat detected!", color="red")
                     events.append({"type": "process", "msg": msg})
+                    # YAML rules match + evidence export (community roadmap)
+                    matches = self.rules.match("process", t["name"])
+                    if matches:
+                        self.evidence.export({"type": "process", "name": t["name"],
+                                              "pid": t["pid"], "msg": msg}, matches)
 
                 # Network monitor
                 for t in self.netmon.scan_ports():
