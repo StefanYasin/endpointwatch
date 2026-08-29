@@ -1,3 +1,13 @@
+<div align="center">
+
+[![Stars](https://img.shields.io/github/stars/StefanYasin/endpointwatch?style=flat)]
+[![License](https://img.shields.io/github/license/StefanYasin/endpointwatch?style=flat)]
+[![Issues](https://img.shields.io/github/issues/StefanYasin/endpointwatch?style=flat)]
+[![Last commit](https://img.shields.io/github/last-commit/StefanYasin/endpointwatch?style=flat)]
+[![Language](https://img.shields.io/github/languages/top/StefanYasin/endpointwatch?style=flat)]
+
+</div>
+
 # 🛡️ endpointwatch
 
 **Live-response endpoint monitoring for Windows.** Watches processes, connections, and persistence — enriched with VirusTotal + AbuseIPDB lookups and plain-English LLM alerts.
