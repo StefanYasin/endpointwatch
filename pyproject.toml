@@ -25,10 +25,14 @@ dependencies = [
   "feedparser>=6.0.11",
   "requests>=2.31.0",
   "openai>=1.40.3",
-  "playsound>=1.3.0",
+  "pyyaml>=6.0",
+  "numpy>=1.24",
+  "scikit-learn>=1.3",
+  "plyer>=2.1",
 ]
 
 [project.optional-dependencies]
+audio = ["simpleaudio>=1.0.4"]
 dev = ["flake8>=7.1.1"]
 
 [project.scripts]
