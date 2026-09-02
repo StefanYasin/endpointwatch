@@ -1,4 +1,8 @@
-import simpleaudio as sa
+try:
+    import simpleaudio as sa
+except ImportError:
+    sa = None  # audio is optional; the package works silently without it
+
 import os
 
 class AudioAlerts:
@@ -11,6 +15,8 @@ class AudioAlerts:
         }
 
     def play(self, level="info"):
+        if sa is None:
+            return
         try:
             file = self.sounds.get(level)
             if not file: return
