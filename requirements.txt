@@ -3,15 +3,15 @@ psutil==5.9.8
 feedparser==6.0.11
 requests==2.31.0
 
-# GUI (Tkinter is built into Python, no pip needed)
-
 # AI integrations
 openai==1.40.3
 
-# Optional audio alerts
-playsound==1.3.0
-
+# GUI (Tkinter is built into Python, no pip needed)
 # Database (sqlite3 is built into Python, no pip needed)
 
-# Linting / Dev (optional but useful)
+# Optional audio alerts:
+#   pip install endpointwatch[audio]  -> simpleaudio
+#   (endpointwatch runs silently without it)
+
+# Dev
 flake8==7.1.1
