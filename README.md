@@ -12,6 +12,20 @@
 
 **Live-response endpoint monitoring for Windows.** Watches processes, connections, and persistence — enriched with VirusTotal + AbuseIPDB lookups and plain-English LLM alerts.
 
+<div align="center">
+<h3>Install</h3>
+</div>
+
+```bash
+pip install endpointwatch
+```
+
+Then run:
+
+```bash
+endpointwatch
+```
+
 Where antivirus stops at protection, endpointwatch goes further: **visual monitoring, YAML-driven detection rules, structured evidence export, AI explanations, and one-click threat neutralization**.
 
 ---
