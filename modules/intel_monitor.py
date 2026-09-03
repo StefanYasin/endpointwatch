@@ -6,9 +6,8 @@ class IntelMonitor:
         self.db = db_conn
         self.apikeys = {}
         try:
-            import json
-            with open("config/api_keys.json") as f:
-                self.apikeys = json.load(f)
+            from config import load_api_keys
+            self.apikeys = load_api_keys()
         except Exception:
             pass
 

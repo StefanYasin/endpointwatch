@@ -39,11 +39,11 @@ class MatrixScreensaver:
 
         # AI
         self.ai_client = None
-        if OpenAI and os.path.exists("config/api_keys.json"):
+        if OpenAI:
             try:
-                with open("config/api_keys.json") as f:
-                    keys = json.load(f)
-                if "openai" in keys:
+                from config import load_api_keys
+                keys = load_api_keys()
+                if keys.get("openai"):
                     self.ai_client = OpenAI(api_key=keys["openai"])
             except Exception:
                 pass
