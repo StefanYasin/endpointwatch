@@ -8,12 +8,9 @@ class AIIntegration:
 
     # ---------------- LOAD KEYS ----------------
     def load_keys(self):
-        """Load API keys from config/api_keys.json"""
-        try:
-            with open("config/api_keys.json") as f:
-                return json.load(f)
-        except Exception:
-            return {}
+        """Load API keys (env vars -> user config -> local gitignored file)."""
+        from config import load_api_keys
+        return load_api_keys()
 
     def get_key(self, provider):
         """Return key for a given provider (e.g., 'openai')"""

@@ -8,19 +8,22 @@ except ImportError:
 
 
 class AIInterface:
-    def __init__(self, keys_path="config/api_keys.json"):
+    def __init__(self, keys_path=None):
         self.keys_path = keys_path
         self.keys = self.load_keys()
 
     def load_keys(self):
-        """Load API keys from config file"""
-        if os.path.exists(self.keys_path):
-            try:
-                with open(self.keys_path) as f:
-                    return json.load(f)
-            except Exception:
-                return {}
-        return {}
+        """Load API keys: explicit path -> env vars -> user config -> local file."""
+        if self.keys_path:
+            if os.path.exists(self.keys_path):
+                try:
+                    with open(self.keys_path) as f:
+                        return json.load(f)
+                except Exception:
+                    return {}
+            return {}
+        from config import load_api_keys
+        return load_api_keys()
 
     def available_providers(self):
         """Return a list of enabled AI providers"""
