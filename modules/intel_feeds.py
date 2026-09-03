@@ -1,10 +1,10 @@
 import requests, json, os
 
 class IntelFeeds:
-    def __init__(self, keys_path="config/api_keys.json"):
+    def __init__(self, keys_path=None):
         self.vt_key = None
         self.abuse_key = None
-        if os.path.exists(keys_path):
+        if keys_path and os.path.exists(keys_path):
             try:
                 with open(keys_path) as f:
                     keys = json.load(f)
@@ -12,6 +12,11 @@ class IntelFeeds:
                     self.abuse_key = keys.get("abuseipdb")
             except Exception:
                 pass
+        else:
+            from config import load_api_keys
+            keys = load_api_keys()
+            self.vt_key = keys.get("virustotal")
+            self.abuse_key = keys.get("abuseipdb")
 
     def vt_lookup_file(self, filepath_or_hash):
         if not self.vt_key:
