@@ -1,0 +1,11 @@
+# Baseline mode: learn what's normal on this endpoint, then flag drift.
+# Copy to config/baseline.yaml or pass flags to baseline_check.py directly.
+
+baseline:
+  store: database/baseline.json   # where learned behavior is kept
+  min_history: 20                 # observations needed before unknowns flag
+  prune_after_days: 90            # forget entities not seen for this long
+
+  # Learn with:  python baseline_check.py --learn
+  # Check with:  python baseline_check.py
+  # JSON output: python baseline_check.py --out findings.json
