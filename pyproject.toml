@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "endpointwatch"
-version = "1.0.0"
+version = "1.1.0"
 description = "Live-response endpoint monitoring for Windows: processes, connections, persistence, VirusTotal/AbuseIPDB enrichment, plain-English LLM alerts"
 readme = "README.md"
 requires-python = ">=3.8"
