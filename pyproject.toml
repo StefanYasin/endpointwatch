@@ -43,7 +43,7 @@ Homepage = "https://github.com/StefanYasin/endpointwatch"
 Source = "https://github.com/StefanYasin/endpointwatch"
 
 [tool.hatch.build]
-exclude = ["tests/**", "config/**", "SQSM Banner.html", "**/__pycache__/**", "*.pyc"]
+exclude = ["tests/**", "config/**", "**/__pycache__/**", "*.pyc"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["core", "modules", "notifications", "database", "gui"]

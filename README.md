@@ -5,6 +5,7 @@
 [![Issues](https://img.shields.io/github/issues/StefanYasin/endpointwatch?style=flat)]
 [![Last commit](https://img.shields.io/github/last-commit/StefanYasin/endpointwatch?style=flat)]
 [![Language](https://img.shields.io/github/languages/top/StefanYasin/endpointwatch?style=flat)]
+[![Tests](https://img.shields.io/github/actions/workflow/status/StefanYasin/endpointwatch/ci.yml?style=flat&label=tests)]
 
 </div>
 
@@ -36,6 +37,7 @@ Where antivirus stops at protection, endpointwatch goes further: **visual monito
 - **See threats, don't just block them** — suspicious processes, hidden startup entries, network connections, clipboard hijacks, file changes
 - **YAML detection rules** *(roadmap #1)* — define your own detections in `config/rules.yaml` without touching code. Ships with defaults for mimikatz, encoded PowerShell, C2 ports, persistence keys
 - **JSON evidence export** *(roadmap #1)* — every rule match writes a structured, SIEM-friendly evidence pack to `evidence/` for incident response
+- **Baseline mode** *(roadmap)* — learn what processes and connection targets are normal on this endpoint, then flag anything new that shows up
 - **Smart explanations** — built-in AI explains alerts in plain English
 - **One-click neutralization** — remove malware from startup instantly, no registry digging
 - **Security news feed** — live updates from Hacker News, US-CERT, Packet Storm, DEF CON, Hak5
@@ -80,6 +82,23 @@ Every rule match writes a timestamped JSON file to `evidence/`:
 
 Feed these to your SIEM, ticketing system, or IR workflow.
 
+## 🧠 Baseline Mode
+
+Learn what's normal, then flag drift. Baseline lives in `database/baseline.json` and works completely offline:
+
+```bash
+# Learn the current state (run a few times over days/weeks for a real profile)
+python baseline_check.py --learn
+
+# Check the current state against the baseline (exit 1 = anomalies found)
+python baseline_check.py
+
+# Machine-readable output for cron/CI
+python baseline_check.py --out findings.json
+```
+
+Unknown processes and connection targets only flag once the baseline has enough history (`--min-history`, default 20), so the learning window doesn't spam you. Configuration reference: `config/baseline.yaml.example`.
+
 ## 🧪 Tests
 
 ```bash
@@ -90,7 +109,7 @@ python -m pytest tests/ -v
 
 - [x] YAML detection rules
 - [x] JSON evidence export
-- [ ] Baseline/learning mode (flag deviations from a learned normal)
+- [x] Baseline/learning mode (flag deviations from a learned normal)
 - [ ] SIEM ingestion guide (Splunk/ELK examples)
 
 ## ⚠️ Notes
