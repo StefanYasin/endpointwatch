@@ -118,6 +118,36 @@ python -m pytest tests/ -v
 - LLM alerts are optional — works fully offline without AI keys
 - Maintained actively — this is the *maintained alternative* in a field of abandoned live-response tools
 
+## FAQ
+
+**What does endpointwatch monitor?**
+
+Processes, network connections, persistence/startup entries, clipboard hijacks, and file changes, plus a live security news feed. See the feature list for the full set.
+
+**Do I need API keys?**
+
+No. The dashboard, detection rules, and evidence export run fully offline. VirusTotal, AbuseIPDB, and the plain-English LLM alerts are optional integrations you enable with your own keys.
+
+**How does baseline mode work?**
+
+Run `python baseline_check.py --learn` a few times over days or weeks so it learns your normal processes and connection targets. Then `python baseline_check.py` flags anything it has never seen, once enough history exists (`--min-history`, default 20). Exit code 1 means anomalies were found.
+
+**How do I write my own detection rules?**
+
+Copy `config/rules.yaml.example` to `config/rules.yaml`. Rules support `process`, `network`, and `persistence` categories with case-insensitive substring matching and severity levels from info to critical.
+
+**Where does my evidence go?**
+
+Every rule match writes a timestamped JSON evidence pack to the `evidence/` folder, ready to feed a SIEM or ticketing system.
+
+**Does it send data anywhere?**
+
+No. Everything stays on the machine it runs on.
+
+**How do I run the tests?**
+
+`python -m pytest tests/ -v`
+
 ## License
 
 MIT
