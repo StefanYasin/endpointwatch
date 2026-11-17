@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-11-16
+
+### Added
+
+- Wazuh-style severity ladder (numeric levels 0-16 with titles)
+- `min_alert_level` threshold in rules.yaml
+- `rule_tester.py` CLI: test sample events against rules, see matches and why
+
 ## [1.1.0] - 2026-10-15
 
 ### Added
