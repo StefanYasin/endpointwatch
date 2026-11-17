@@ -9,6 +9,21 @@ import os
 import yaml
 from datetime import datetime, timezone
 
+# Wazuh-style severity ladder: every rule maps to a numeric level (0-16) with
+# a human title, so alerts can be filtered by a single minimum threshold.
+SEVERITY_LEVELS = {
+    "info":     {"level": 2,  "title": "Informational"},
+    "low":      {"level": 4,  "title": "Low"},
+    "medium":   {"level": 6,  "title": "Medium"},
+    "high":     {"level": 9,  "title": "High"},
+    "critical": {"level": 12, "title": "Critical"},
+}
+
+
+def severity_level(severity):
+    """Numeric level (0-16) for a severity name; unknown -> 4 (low)."""
+    return SEVERITY_LEVELS.get(severity, SEVERITY_LEVELS["low"])["level"]
+
 # Default rules shipped with the project — used when no rules.yaml exists.
 DEFAULT_RULES = {
     "process": [
@@ -35,10 +50,13 @@ DEFAULT_RULES = {
 class RulesEngine:
     """Loads and matches YAML detection rules against events."""
 
-    def __init__(self, rules_path=None):
+    def __init__(self, rules_path=None, min_level=0):
         self.rules_path = rules_path or os.path.join(
             os.path.dirname(__file__), "..", "config", "rules.yaml")
         self.rules = self._load()
+        # A user-facing minimum alert threshold: rules below this level are
+        # ignored entirely (the Wazuh log_alert_level idea, per-rule here).
+        self.min_level = min_level or self.rules.get("min_alert_level", 0)
 
     def _load(self):
         """Load rules from YAML; fall back to defaults if missing/invalid."""
@@ -61,15 +79,34 @@ class RulesEngine:
         hits = []
         value_l = str(value).lower()
         for rule in self.rules.get(category, []):
+            severity = rule.get("severity", "medium")
+            if severity_level(severity) < self.min_level:
+                continue
             pattern = str(rule.get("pattern", "")).lower()
             if pattern and pattern in value_l:
                 hits.append({
                     "name": rule.get("name", pattern),
-                    "severity": rule.get("severity", "medium"),
+                    "severity": severity,
+                    "level": severity_level(severity),
                     "reason": rule.get("reason", ""),
                     "matched_at": datetime.now(timezone.utc).isoformat(),
                 })
         return hits
 
     def severity_rank(self, severity):
-        return {"info": 0, "low": 1, "medium": 2, "high": 3, "critical": 4}.get(severity, 1)
+        return severity_level(severity)
+
+    def explain(self, category, value):
+        """Matches plus why: for the rule tester and alert explanations."""
+        hits = self.match(category, value)
+        return [
+            {**h, "why": f"pattern '{self._pattern_for(category, h['name'])}' "
+                          f"found in '{value}'"}
+            for h in hits
+        ]
+
+    def _pattern_for(self, category, name):
+        for rule in self.rules.get(category, []):
+            if rule.get("name") == name:
+                return rule.get("pattern", "")
+        return ""
